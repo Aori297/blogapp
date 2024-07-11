@@ -56,3 +56,63 @@ export const registerUser = async (req, res) => {
     console.log(error);
   }
 };
+
+// Send email verification link
+export const verifyEmail = async (req, res) => {
+  try {
+    const { token } = req.params;
+    const user = await UserModel.findOneAndUpdate(
+      { emailVerificationToken: token },
+      {
+        $set: {
+          emailVerified: true,
+          emailVerificationToken: "",
+          emailVerificationExpires: null,
+        },
+      }
+    );
+
+    if (!user) {
+      throw new BadRequestError("Invalid token or user not found");
+    }
+
+    return res.status(200).json({
+      message: "Email verified successfully",
+    });
+  } catch (error) {
+    console.log(error);
+    throw new BadRequestError(error.message);
+  }
+};
+
+// resend email verification link
+export const resendEmail = async (req, res) => {
+  const { email } = req.body;
+  const user = await UserModel.findOne({ email });
+  if (user.emailVerified) {
+    throw new BadRequestError("Email is already verified");
+  }
+  const emailVerificationToken = await generateRandomToken();
+  const emailVerificationExpires = addExpiryHours();
+
+  user.emailVerificationToken = emailVerificationToken;
+  user.emailVerificationExpires = emailVerificationExpires;
+  await user.save();
+
+  const mailOptions = {
+    from: "admin@blog.com",
+    to: user.email,
+    subject: "Email Verification",
+    template: "emailVerify",
+    context: {
+      fullName: user.fullName,
+      url: `${process.env.CLIENT_URL}/verify-email/${user.emailVerificationToken}`,
+    },
+  };
+
+  await sendMail(mailOptions);
+
+  return res.status(200).json({
+    message: "Email verification token resent successfully",
+  });
+};

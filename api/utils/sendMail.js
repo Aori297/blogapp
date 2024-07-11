@@ -5,16 +5,16 @@ import { transporter } from "../helpers/mail.js";
 const handlebarOptions = {
   viewEngine: {
     extName: ".handlebars",
-    partialsDir: path.resolve(" ../api/views/"),
+    partialsDir: path.resolve("../api/views/"),
     defaultLayout: false,
   },
-  viewPath: path.resolve(" ../api/views/"),
+  viewPath: path.resolve("../api/views/"),
   extName: ".handlebars",
 };
 
 // Send email function
 export const sendMail = (mailOptions) => {
-  transporter.use(hbs(handlebarOptions));
+  transporter.use("compile", hbs(handlebarOptions));
 
   transporter.sendMail(mailOptions, (error, info) => {
     if (error) {
