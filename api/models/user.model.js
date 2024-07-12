@@ -3,10 +3,10 @@ import { hash, genSalt } from "bcrypt";
 
 const userSchema = new Schema(
   {
-    firstName: { type: String, required: true, tirm: true },
-    lastName: { type: String, required: true, tirm: true },
+    firstName: { type: String, required: true, trim: true },
+    lastName: { type: String, required: true, trim: true },
     email: { type: String, required: true, lowercase: true, unique: true },
-    password: { type: String, required: true, tirm: true },
+    password: { type: String, required: true, trim: true },
     profilePicture: { type: String, default: "" },
     role: { type: String, default: "user" },
     emailVerified: { type: Boolean, default: false },
