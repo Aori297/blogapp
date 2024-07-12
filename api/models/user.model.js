@@ -36,7 +36,7 @@ userSchema.pre("save", async function (next) {
   next();
 });
 
-userSchema.virtual("fullname").get(function () {
+userSchema.virtual("fullName").get(function () {
   return `${this.firstName} ${this.lastName}`;
 });
 

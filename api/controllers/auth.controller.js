@@ -1,5 +1,6 @@
 import { BadRequestError } from "../helpers/error-handler.js";
 import { UserModel } from "../models/user.model.js";
+import { findUser } from "../services/user.service.js";
 import { sendMail } from "../utils/sendMail.js";
 import {
   addExpiryHours,
@@ -89,6 +90,8 @@ export const verifyEmail = async (req, res) => {
 export const resendEmail = async (req, res) => {
   const { email } = req.body;
   const user = await UserModel.findOne({ email });
+
+  console.log(user);
   if (user.emailVerified) {
     throw new BadRequestError("Email is already verified");
   }
@@ -103,7 +106,7 @@ export const resendEmail = async (req, res) => {
     from: "admin@blog.com",
     to: user.email,
     subject: "Email Verification",
-    template: "emailVerify",
+    template: "verifyEmail",
     context: {
       fullName: user.fullName,
       url: `${process.env.CLIENT_URL}/verify-email/${user.emailVerificationToken}`,
@@ -114,5 +117,55 @@ export const resendEmail = async (req, res) => {
 
   return res.status(200).json({
     message: "Email verification token resent successfully",
+  });
+};
+
+export const forgotPassword = async (req, res) => {
+  const { email } = req.body;
+  const user = await findUser({ email });
+
+  console.log(user);
+
+  const passwordResetToken = await generateRandomToken();
+  const passwordResetExpires = addExpiryHours();
+
+  user.passwordResetToken = passwordResetToken;
+  user.passwordResetExpires = passwordResetExpires;
+  await user.save();
+
+  const mailOptions = {
+    from: "admin@blog.com",
+    to: user.email,
+    subject: "Reset Password",
+    template: "resetPassword",
+    context: {
+      fullName: user.fullName,
+      url: `${process.env.CLIENT_URL}/resetPassword/${user.passwordResetToken}`,
+    },
+  };
+
+  await sendMail(mailOptions);
+
+  return res.status(200).json({
+    message: "Password Reset sent successfully",
+  });
+};
+export const resetPassword = async (req, res) => {
+  const { password, confirmPassword } = req.body;
+
+  if (password !== confirmPassword) {
+    throw new BadRequestError("Passwords do not match");
+  }
+
+  const token = req.params.token;
+  const user = await findUser({ passwordResetToken: token });
+
+  user.password = password;
+  user.passwordResetToken = "";
+  user.passwordResetExpires = null;
+  await user.save();
+
+  return res.status(200).json({
+    message: "Password reset successfully",
   });
 };
