@@ -1,3 +1,4 @@
+import { compare, hash } from "bcrypt";
 import { BadRequestError } from "../helpers/error-handler.js";
 import { UserModel } from "../models/user.model.js";
 

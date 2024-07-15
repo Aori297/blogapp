@@ -1,3 +1,4 @@
+import jwt from "jsonwebtoken";
 import { BadRequestError } from "../helpers/error-handler.js";
 import { UserModel } from "../models/user.model.js";
 import { findUser } from "../services/user.service.js";
@@ -167,5 +168,34 @@ export const resetPassword = async (req, res) => {
 
   return res.status(200).json({
     message: "Password reset successfully",
+  });
+};
+
+export const loginUser = async (req, res) => {
+  const { email, password } = req.body;
+
+  const user = await findUser({ email });
+  if (!user) {
+    throw new BadRequestError("Invalid email or password");
+  }
+
+  const matchedPassword = await user.comparePassword(password);
+  if (!matchedPassword) {
+    throw new BadRequestError("Invalid email or password");
+  }
+
+  const payload = {
+    id: user._id,
+    email: user.email,
+    role: user.role,
+  };
+
+  const accessToken = jwt.sign(payload, process.env.JWT_SECRET, {
+    expiresIn: "7d",
+  });
+
+  return res.status(200).json({
+    user,
+    accessToken,
   });
 };

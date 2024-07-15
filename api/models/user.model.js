@@ -1,5 +1,5 @@
 import { Schema, model } from "mongoose";
-import { hash, genSalt } from "bcrypt";
+import { hash, genSalt, compare } from "bcrypt";
 
 const userSchema = new Schema(
   {
@@ -35,6 +35,10 @@ userSchema.pre("save", async function (next) {
   }
   next();
 });
+
+userSchema.methods.comparePassword = async function (password) {
+  return compare(password, this.password);
+};
 
 userSchema.virtual("fullName").get(function () {
   return `${this.firstName} ${this.lastName}`;
