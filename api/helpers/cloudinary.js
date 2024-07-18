@@ -1,4 +1,5 @@
 import cloudinary from "cloudinary";
+import streamifier from "streamifier";
 
 cloudinary.v2.config({
   cloud_name: process.env.CLOUD_NAME,
