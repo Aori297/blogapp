@@ -5,7 +5,10 @@ const blogSchema = new Schema({
   content: { type: String, required: true },
   shortDescription: { type: String, required: true },
   author: { type: Schema.Types.ObjectId, ref: "User" },
-  coverImage: { type: String, default: "" },
+  coverImage: {
+    publicId: { type: String, default: "" },
+    url: { type: String, default: "" },
+  },
   tags: [{ type: String }],
   likeCount: { type: Number, default: 0 },
   commentCount: { type: Number, default: 0 },

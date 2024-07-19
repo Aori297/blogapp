@@ -151,6 +151,7 @@ export const forgotPassword = async (req, res) => {
     message: "Password Reset sent successfully",
   });
 };
+
 export const resetPassword = async (req, res) => {
   const { password, confirmPassword } = req.body;
 
