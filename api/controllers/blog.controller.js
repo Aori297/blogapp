@@ -102,3 +102,40 @@ export const deleteBlog = async (req, res) => {
     throw new BadRequestError(error.message);
   }
 };
+
+export const fetchSingleBlog = async (req, res) => {
+  const blog = await BlogModel.findById(req.params.id).populate(
+    "author",
+    "email firstname lastname profilePicture"
+  );
+  if (!blog) throw new NotFoundError("Blog not found");
+
+  return res.status(200).json(blog);
+};
+
+export const fetchAllBlogs = async (req, res) => {
+  const page = +req.query.page || 1;
+  const limit = +req.query.limit || 5;
+  const search = req.query.search || "";
+
+  const skip = (page - 1) * limit;
+
+  const query = { title: { $regex: search, $options: "i" } };
+
+  const blog = await BlogModel.find(query)
+    .skip(skip)
+    .sort({ createdAt: -1 })
+    .limit(limit)
+    .populate("author", "email profilePicture firstname lastname");
+
+  const total = await BlogModel.countDocuments(query);
+
+  const totalPages = Maths.ceil(total / limit);
+
+  return res.status(200).json({
+    blog,
+    total,
+    page,
+    totalPages,
+  });
+};
