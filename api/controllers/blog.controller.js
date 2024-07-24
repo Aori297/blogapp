@@ -130,7 +130,7 @@ export const fetchAllBlogs = async (req, res) => {
 
   const total = await BlogModel.countDocuments(query);
 
-  const totalPages = Maths.ceil(total / limit);
+  const totalPages = Math.ceil(total / limit);
 
   return res.status(200).json({
     blog,
