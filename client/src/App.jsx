@@ -1,43 +1,17 @@
-import React, { useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 
 const App = () => {
-  const [user, setUser] = useState({
-    name: "",
-    age: "",
-    email: "",
-  })
+  const headingref = useRef(null)
 
-  const handleChange = e => {
-    setUser({ ...user, [e.target.name]: e.target.value })
-  }
+  useEffect(() => {
+    headingref.current.innerHTML = "Hello"
+  }, [])
 
-  return (
+  return(
     <>
-      {JSON.stringify(user)}
-      <form onSubmit={e => {}}>
-        <input 
-          type="text" 
-          name="name" 
-          value={user.name} 
-          onChange={handleChange}
-        />
-        <input 
-          type="number" 
-          name="age" 
-          value={user.age} 
-          onChange={handleChange}
-        />
-        <input 
-          type="email" 
-          name="email" 
-          value={user.email} 
-          onChange={handleChange}
-        />
-        <button type="submit">Submit</button>
-      </form>
+      <h1 ref={headingref}>Hello World</h1>
     </>
   )
-  
 }
 
 export default App
