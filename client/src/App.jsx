@@ -1,15 +1,19 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { lazy, Suspense } from 'react'
+import { Route, Routes } from 'react-router-dom'
+
+const HomePage = lazy(() => import('./pages/HomePage'))
+const AboutPage = lazy(() => import('./pages/AboutPage'))
 
 const App = () => {
-  const headingref = useRef(null)
-
-  useEffect(() => {
-    headingref.current.innerHTML = "Hello"
-  }, [])
-
-  return(
+  return (
     <>
-      <h1 ref={headingref}>Hello World</h1>
+      <Suspense fallback={<h1>Loading</h1>}>
+        <Routes>
+          <Route path = "/" element={<HomePage />}/>
+          <Route path = "/about" element={<AboutPage />}/>
+          <Route path = "/contact" element={<h1>Contact Page</h1>}/>
+        </Routes>
+      </Suspense>
     </>
   )
 }
