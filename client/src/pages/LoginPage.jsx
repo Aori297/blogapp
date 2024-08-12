@@ -9,7 +9,7 @@ import { Link } from 'react-router-dom'
 
 const formSchema = Yup.object().shape({
   email:Yup.string().required("Email is required").email("Please provide a valid email address"),
-  password:Yup.string().required("password is required")
+  password:Yup.string().required("Password is required")
 })
 
 const LoginPage = () => {
@@ -38,11 +38,17 @@ const LoginPage = () => {
         <Field className='flex flex-col space y-1'>
           <Label className='text-sm'>Email</Label>
           <Input type='email' {...register('email')}/>
+          {errors.email && (
+            <p className='text-xs text-red-500'>{errors.email.message}</p>
+          )}
         </Field>
 
         <Field className='flex flex-col space y-1'>
           <Label className='text-sm'>Password</Label>
           <Input type='password' {...register('password')}/>
+          {errors.password && (
+            <p className='text-xs text-red-500'>{errors.password.message}</p>
+          )}
         </Field>
 
         <Button type="submit" className = 'w-full !mt-10'> 
