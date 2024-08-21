@@ -5,7 +5,8 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import { useForm } from 'react-hook-form'
 import {Field, Label } from '@headlessui/react'
 import React from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
+import { loginUserMutation } from '@/actions/mutations/auth/loginUserMutation'
 
 const formSchema = Yup.object().shape({
   email:Yup.string().required("Email is required").email("Please provide a valid email address"),
@@ -13,6 +14,9 @@ const formSchema = Yup.object().shape({
 })
 
 const LoginPage = () => {
+
+  const navigate  = useNavigate()
+  const mutation = loginUserMutation()
 
   const {
     register,
@@ -26,8 +30,14 @@ const LoginPage = () => {
     resolver: yupResolver(formSchema),
   })
 
+  
+
   const onSubmit = async values =>{
-    console.log(values)
+    mutation.mutate(values, {
+      onSuccess: () => {
+        navigate('/')
+      }
+    })
   }
 
   return (
