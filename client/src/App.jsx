@@ -4,6 +4,7 @@ import { Route, Routes } from 'react-router-dom'
 
 const HomePage = lazy(() => import('./pages/HomePage'))
 const LoginPage = lazy(() => import('./pages/LoginPage'))
+const RegisterPage = lazy(() => import('./pages/RegisterPage'))
 
 const App = () => {
   return (
@@ -12,6 +13,7 @@ const App = () => {
         <Routes>
           <Route path = "/" element={<HomePage />}/>
           <Route path = "/login" element={<LoginPage />}/>
+          <Route path = "/register" element={<RegisterPage />}/>
         </Routes>
         <Toaster />
       </Suspense>
