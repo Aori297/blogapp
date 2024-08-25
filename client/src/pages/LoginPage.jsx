@@ -8,6 +8,7 @@ import React from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { loginUserMutation } from '@/actions/mutations/auth/loginUserMutation'
 import { useDispatch } from 'react-redux'
+import { SETUSER } from '@/features/authSlice'
 
 const formSchema = Yup.object().shape({
   email:Yup.string().required("Email is required").email("Please provide a valid email address"),
@@ -39,7 +40,7 @@ const LoginPage = () => {
       onSuccess: data => {
         navigate('/')
         dispatch(SETUSER(data.user))
-        localStorage.setItem('access-token', data.token)
+        localStorage.setItem('access-token', data.accessToken)
       }
     })
   }
