@@ -5,10 +5,10 @@ import { setBlog } from '@/features/blogSlice'
 import { Button } from '@headlessui/react'
 import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 
 export const CreateBlog = () => {
-
+  const navigate = useNavigate()
   const dispatch = useDispatch()
 
   const [title, setTitle] = useState('')
@@ -22,6 +22,7 @@ export const CreateBlog = () => {
 
   const handleBlog = () => {
     dispatch(setBlog({title, content}))
+    navigate('/admin/publish')
   } 
 
   return (

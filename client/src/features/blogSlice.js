@@ -9,11 +9,11 @@ const blogSlice = createSlice({
   name: "blog",
   initialState,
   reducers: {
-    SETBLOG: (state, action) => {
+    setBlog: (state, action) => {
       state.title = action.payload.title;
       state.content = action.payload.content;
     },
-    CLEARBLOG: (state) => {
+    clearBlog: (state) => {
       state.title = "";
       state.content = "";
     },
@@ -21,4 +21,4 @@ const blogSlice = createSlice({
 });
 
 export const { setBlog, clearBlog } = blogSlice.actions;
-export const { blogReducer } = blogSlice.reducer;
+export const blogReducer = blogSlice.reducer;

@@ -9,6 +9,7 @@ const LoginPage = lazy(() => import('./pages/LoginPage'))
 const RegisterPage = lazy(() => import('./pages/RegisterPage'))
 
 const AdminCreateBlogPage = lazy(() => import('./pages/admin/CreateBlog'))
+const AdminPublishBlogPage = lazy(() => import('./pages/admin/PublishBlog'))
 
 const App = () => {
   return (
@@ -34,6 +35,10 @@ const App = () => {
               <Route
                 path="create"
                 element={<AdminCreateBlogPage />}>
+              </Route>
+              <Route
+                path="publish"
+                element={<AdminPublishBlogPage />}>
               </Route>
             </Route>
           </Route>
