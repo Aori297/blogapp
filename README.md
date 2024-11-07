@@ -51,13 +51,13 @@ Before running the app locally, you need to have the following installed:
 
    **Backend**:
    ```bash
-   cd backend
+   cd api
    npm install
    ```
 
    **Frontend**:
    ```bash
-   cd frontend
+   cd client
    npm install
    ```
 
@@ -71,13 +71,13 @@ Before running the app locally, you need to have the following installed:
 
 5. Start the backend server:
    ```bash
-   cd backend
+   cd api
    npm start
    ```
 
 6. Start the frontend React app:
    ```bash
-   cd frontend
+   cd client
    npm start
    ```
 
